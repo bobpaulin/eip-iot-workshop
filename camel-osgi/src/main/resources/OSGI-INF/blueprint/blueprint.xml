@@ -1,0 +1,17 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<reference id="pooledConnectionFactory" interface="javax.jms.ConnectionFactory"/>
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+        <route>
+            <from uri="restlet:http://localhost:8282/test" />
+            <to uri="log:rest" />
+        </route>
+        <route>
+            <from uri="jms:queue:TEST.FOO?connectionFactory=pooledConnectionFactory" />
+            <to uri="log:jms" />
+        </route>
+        <route>
+            <from uri="websocket://localhost:9998/test" />
+            <to uri="log:websocket" />
+        </route>
+    </camelContext>
+</blueprint>

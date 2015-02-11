@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'osgi'
+
+group = 'com.bobpaulin.camel'
+
+sourceCompatibility = 1.7
+version = '1.0'
+jar{
+	manifest{
+		instruction 'Import-Package', 'javax.jms;version="[1.1,2)"'
+	}
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
