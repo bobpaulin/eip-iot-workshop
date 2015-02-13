@@ -1,0 +1,11 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<reference id="gpioService" interface="com.pi4j.io.gpio.service.GpioService"/>
+	<bean id="blinkService" class="com.bobpaulin.pi.impl.BlinkServiceImpl" init-method="init">
+		<property name="gpioService" ref="gpioService"/>
+	</bean>
+	<service ref="blinkService" interface="com.bobpaulin.pi.BlinkService">
+        <service-properties>
+            <entry key="name" value="blinkService" />
+        </service-properties>
+    </service>
+</blueprint>
