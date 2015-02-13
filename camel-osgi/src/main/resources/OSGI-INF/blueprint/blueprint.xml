@@ -1,17 +1,21 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 	<reference id="pooledConnectionFactory" interface="javax.jms.ConnectionFactory"/>
+	<reference id="blinkService" interface="com.bobpaulin.pi.BlinkService"/>
+	<bean id="endpointToPi" class="com.bobpaulin.camel.EndpointToPi4J">
+		<property name="blinkService" ref="blinkService" />
+	</bean>
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
         <route>
-            <from uri="restlet:http://localhost:8282/test" />
-            <to uri="log:rest" />
+            <from uri="restlet:http://localhost:8282/blink/{restMessage}" />
+            <to uri="bean:endpointToPi?method=blink(${header.restMessage})" />
         </route>
         <route>
-            <from uri="jms:queue:TEST.FOO?connectionFactory=pooledConnectionFactory" />
-            <to uri="log:jms" />
+            <from uri="jms:queue:blink?connectionFactory=pooledConnectionFactory" />
+            <to uri="bean:endpointToPi?method=blink(${body})" />
         </route>
         <route>
-            <from uri="websocket://localhost:9998/test" />
-            <to uri="log:websocket" />
+            <from uri="websocket://localhost:9998/blink" />
+            <to uri="bean:endpointToPi?method=blink(${body})" />
         </route>
     </camelContext>
 </blueprint>

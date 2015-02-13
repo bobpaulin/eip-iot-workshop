@@ -1,0 +1,9 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'osgi'
+
+group = 'com.bobpaulin.pi'
+
+sourceCompatibility = 1.7
+version = '1.0'

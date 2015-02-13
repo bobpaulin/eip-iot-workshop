@@ -1,6 +1,6 @@
 package com.bobpaulin.jms;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.jms.Connection;
@@ -12,12 +12,21 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-public class HelloWorldProducer implements Runnable {
+public class BlinkProducer implements Runnable {
+	
+	private final String color;
+	
+	public BlinkProducer(String color) 
+	{
+		this.color = color;
+	}
 	
 	public void run() {
 		try {
             // Create a ConnectionFactory
-            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+            ActiveMQConnectionFactory connectionFactory = 
+            		new ActiveMQConnectionFactory("tcp://localhost:61616");
+            
             connectionFactory.setUserName("karaf");
             connectionFactory.setPassword("karaf");
 
@@ -29,18 +38,16 @@ public class HelloWorldProducer implements Runnable {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             // Create the destination (Topic or Queue)
-            Destination destination = session.createQueue("TEST.FOO");
+            Destination destination = session.createQueue("blink");
 
             // Create a MessageProducer from the Session to the Topic or Queue
             MessageProducer producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
             // Create a messages
-            String text = "Hello world! From: " + Thread.currentThread().getName() + " : " + this.hashCode();
-            TextMessage message = session.createTextMessage(text);
+            TextMessage message = session.createTextMessage(color);
 
             // Tell the producer to send the message
-            System.out.println("Sent message: "+ message.hashCode() + " : " + Thread.currentThread().getName());
             producer.send(message);
 
             // Clean up
@@ -55,10 +62,12 @@ public class HelloWorldProducer implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		Executor messageExecutor = Executors.newFixedThreadPool(2);
+		ExecutorService messageExecutor = Executors.newFixedThreadPool(2);
 		
-		messageExecutor.execute(new HelloWorldProducer());
-		messageExecutor.execute(new HelloWorldProducer());
+		messageExecutor.execute(new BlinkProducer("red"));
+		messageExecutor.execute(new BlinkProducer("blue"));
+		messageExecutor.shutdown();
+		
 	}
 
 }

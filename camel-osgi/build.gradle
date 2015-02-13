@@ -9,14 +9,16 @@ sourceCompatibility = 1.7
 version = '1.0'
 jar{
 	manifest{
-		instruction 'Import-Package', 'javax.jms;version="[1.1,2)"'
+		instruction 'Import-Package', 'javax.jms;version="[1.1,2)",com.bobpaulin.pi;version="[1.0,2)"'
 	}
 }
 repositories {
+	mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+	compile group: 'com.bobpaulin.pi', name: 'pi-mock', version: '1.0'
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 

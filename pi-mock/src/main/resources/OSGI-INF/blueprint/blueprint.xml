@@ -1,0 +1,8 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<bean id="blinkService" class="com.bobpaulin.pi.impl.MockBlinkServiceImpl"/>
+	<service ref="blinkService" interface="com.bobpaulin.pi.BlinkService">
+        <service-properties>
+            <entry key="name" value="blinkService" />
+        </service-properties>
+    </service>
+</blueprint>
