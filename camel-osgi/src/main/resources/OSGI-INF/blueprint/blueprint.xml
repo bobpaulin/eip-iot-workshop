@@ -14,7 +14,7 @@
             <to uri="bean:endpointToPi?method=blink(${body})" />
         </route>
         <route>
-            <from uri="websocket://localhost:9998/blink" />
+            <from uri="websocket://0.0.0.0:9998/blink" />
             <to uri="bean:endpointToPi?method=blink(${body})" />
         </route>
     </camelContext>
