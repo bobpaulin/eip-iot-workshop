@@ -23,7 +23,7 @@ public class BlinkServiceImpl implements BlinkService
 	public void init()
 	{
 		ledOutMap.put("red", gpioService.provisionDigitalOutputPin(RaspiPin.GPIO_07, "RedLED", PinState.LOW));
-		ledOutMap.put("blue", gpioService.provisionDigitalOutputPin(RaspiPin.GPIO_08, "BlueLED", PinState.LOW));
+		ledOutMap.put("blue", gpioService.provisionDigitalOutputPin(RaspiPin.GPIO_00, "BlueLED", PinState.LOW));
 	}
 
 	@Override
